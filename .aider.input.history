@@ -206,3 +206,102 @@
 
 # 2024-12-16 00:23:17.748632
 +/run git add .
+
+# 2024-12-16 00:23:18.068934
++/run git commit -m "Rename docker-compose.yaml to docker-compose-kafka.yaml and add Airflow services"
+
+# 2024-12-16 00:23:18.070291
++/run git commit -m "Rename docker-compose.yaml to docker-compose-kafka.yaml and add Airflow services"
+
+# 2024-12-16 00:23:18.462250
++/run git push origin main
+
+# 2024-12-16 00:23:18.462250
++/run git push origin main
+
+# 2024-12-16 00:24:26.713937
++n
+
+# 2024-12-16 00:24:37.078349
++now how to get that changes
+
+# 2024-12-16 00:24:56.674318
++y
+
+# 2024-12-16 00:24:56.691798
++/run git fetch origin
+
+# 2024-12-16 00:24:56.692812
++/run git fetch origin
+
+# 2024-12-16 00:24:59.991647
++/run git pull origin main
+
+# 2024-12-16 00:24:59.992627
++/run git pull origin main
+
+# 2024-12-16 00:25:06.759730
++n
+
+# 2024-12-16 00:25:26.794040
++go to airflow branch
+
+# 2024-12-16 00:25:45.835045
++y
+
+# 2024-12-16 00:25:45.849991
++/run git checkout airflow
+
+# 2024-12-16 00:25:45.851426
++/run git checkout airflow
+
+# 2024-12-16 00:25:48.370523
++n
+
+# 2024-12-16 00:25:52.797352
++y
+
+# 2024-12-16 00:25:52.813448
++/run git checkout -b airflow
+
+# 2024-12-16 00:25:52.814483
++/run git checkout -b airflow
+
+# 2024-12-16 00:25:57.268199
++n
+
+# 2024-12-16 00:26:22.390356
++show the changes we made in airflow
+
+# 2024-12-16 00:26:48.946666
++y
+
+# 2024-12-16 00:26:48.966103
++/run git checkout airflow
+
+# 2024-12-16 00:26:48.966103
++/run git checkout airflow
+
+# 2024-12-16 00:26:52.641486
++n
+
+# 2024-12-16 00:26:56.120277
++y
+
+# 2024-12-16 00:26:56.138095
++/run git diff
+
+# 2024-12-16 00:26:56.138095
++/run git diff
+
+# 2024-12-16 00:27:04.634438
++n
+
+# 2024-12-16 00:27:29.634616
++just show the changes in airflow branch
+
+# 2024-12-16 00:28:01.768830
++n
+
+# 2024-12-16 00:29:52.315398
++how to get out of git check
