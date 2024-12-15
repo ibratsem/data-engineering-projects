@@ -1,0 +1,208 @@
+
+# 2024-12-15 20:44:38.034383
++y
+
+# 2024-12-15 20:45:30.857051
++how to create a branck for airflow here in git
+
+# 2024-12-15 20:45:59.023676
++y
+
+# 2024-12-15 20:45:59.036739
++/run git checkout main
+
+# 2024-12-15 20:45:59.036739
++/run git checkout main
+
+# 2024-12-15 20:46:07.311768
++n
+
+# 2024-12-15 20:46:42.762977
++y
+
+# 2024-12-15 20:46:42.775735
++/run git checkout -b airflow
+
+# 2024-12-15 20:46:42.775735
++/run git checkout -b airflow
+
+# 2024-12-15 20:46:50.513006
++n
+
+# 2024-12-15 20:46:54.201540
++y
+
+# 2024-12-15 20:46:54.213680
++/run git push origin airflow
+
+# 2024-12-15 20:46:54.213680
++/run git push origin airflow
+
+# 2024-12-15 20:47:04.661781
++n
+
+# 2024-12-15 23:49:44.316450
++do i habe a docker compose file?
+
+# 2024-12-15 23:51:08.175340
++check if i have docker compose file
+
+# 2024-12-15 23:51:56.488056
++n
+
+# 2024-12-15 23:52:31.710639
++i want to add some data for airflow for this file can you make changes
+
+# 2024-12-15 23:52:56.209146
++services:                                                                                                                                       
++  postgres:                                                                                                                                     
++    image: postgres:13                                                                                                                         
++    environment:                                                                                                                                
++      POSTGRES_USER: airflow                                                                                                                    
++      POSTGRES_PASSWORD: airflow                                                                                                                
++      POSTGRES_DB: airflow                                                                                                                      
++    volumes:                                                                                                                                    
++      - postgres_data:/var/lib/postgresql/data                                                                                                  
++                                                                                                                                                
++  redis:                                                                                                                                        
++    image: redis:latest                                                                                                                         
++                                                                                                                                                
++  webserver:                                                                                                                                    
++    image: apache/airflow:2.6.3                                                                                                                 
++    environment:
++      AIRFLOW__CORE__EXECUTOR: CeleryExecutor                                                                                                   
++      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflowpostgres/airflow                                                   
++      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflowpostgres/airflow                                                         
++      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0                                                                                         
++      AIRFLOW__CORE__FERNET_KEY: ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg=                                                                                              
++      AIRFLOW__CORE__LOAD_EXAMPLES: false                                                                                                      
++    volumes:                                                                                                                                    
++      - ./dags:/opt/airflow/dags                                                                                                                
++    ports:
++      - "8080:8080"
++    depends_on:
++      - init
++    command: webserver                                                                                                                          
++                                                                                                                                                
++  scheduler:                                                                                                                                    
++    image: apache/airflow:2.6.3                                                                                                                 
++    environment:                                                                                                                                
++      AIRFLOW__CORE__EXECUTOR: CeleryExecutor                                                                                                   
++      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflowpostgres/airflow                                                   
++      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflowpostgres/airflow                                                         
++      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0                                                                                         
++      AIRFLOW__CORE__FERNET_KEY: ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg=                                                                                              
++      AIRFLOW__CORE__LOAD_EXAMPLES: false                                                                                                      
++    volumes:                                                                                                                                    
++      - ./dags:/opt/airflow/dags                                                                                                                
++    depends_on:                                                                                                                                 
++      - init
++    command: scheduler                                                                                                                          
++                                                                                                                                                
++  init:
++    image: apache/airflow:2.6.3
++    environment:
++      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
++      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflowpostgres/airflow
++      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflowpostgres/airflow
++      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
++      AIRFLOW__CORE__FERNET_KEY: ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg=
++      AIRFLOW__CORE__LOAD_EXAMPLES: false
++    volumes:
++      - ./dags:/opt/airflow/dags
++    depends_on:
++      - postgres
++      - redis
++    command: bash -c "airflow db init  airflow users create --username admin --password admin --firstname Admin --lastname User --role Admin --email adminexample.com"
++    restart: on-failure
++
++  worker:
++    image: apache/airflow:2.6.3
++    environment:
++      AIRFLOW__CORE__EXECUTOR: CeleryExecutor
++      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflowpostgres/airflow
++      AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflowpostgres/airflow
++      AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
++      AIRFLOW__CORE__FERNET_KEY: ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg=
++      AIRFLOW__CORE__LOAD_EXAMPLES: false
++    volumes:
++      - ./dags:/opt/airflow/dags
++    depends_on:
++      - init
++    command: celery worker
++
++volumes:
++  postgres_data:
++
+
+# 2024-12-15 23:54:18.023436
++y
+
+# 2024-12-15 23:56:58.385680
++i dont get what you did. you should add airflow to docker compose
+
+# 2024-12-16 00:10:34.042067
++can we rename docker-compose to docker-compose-kafka
+
+# 2024-12-16 00:12:16.459391
++y
+
+# 2024-12-16 00:12:16.474748
++/run ren docker-compose.yaml docker-compose-kafka.yaml
+
+# 2024-12-16 00:12:16.476208
++/run ren docker-compose.yaml docker-compose-kafka.yaml
+
+# 2024-12-16 00:14:48.032366
++where are we
+
+# 2024-12-16 00:15:21.781508
++yes
+
+# 2024-12-16 00:15:21.796867
++/run ren docker-compose.yaml docker-compose-kafka.yaml
+
+# 2024-12-16 00:15:21.798307
++/run ren docker-compose.yaml docker-compose-kafka.yaml
+
+# 2024-12-16 00:15:24.447926
++n
+
+# 2024-12-16 00:15:35.994056
++push changes 
+
+# 2024-12-16 00:16:04.294429
++y
+
+# 2024-12-16 00:16:04.311822
++/run git add .
+
+# 2024-12-16 00:16:04.312824
++/run git add .
+
+# 2024-12-16 00:16:04.644448
++/run git commit -m "Rename docker-compose.yaml to docker-compose-kafka.yaml and add Airflow services"
+
+# 2024-12-16 00:16:04.644448
++/run git commit -m "Rename docker-compose.yaml to docker-compose-kafka.yaml and add Airflow services"
+
+# 2024-12-16 00:16:05.034436
++/run git push origin main
+
+# 2024-12-16 00:16:05.035419
++/run git push origin main
+
+# 2024-12-16 00:16:10.719428
++n
+
+# 2024-12-16 00:22:07.027295
++i renamed the file in main directory. how to push changes
+
+# 2024-12-16 00:22:49.296521
++y
+
+# 2024-12-16 00:23:17.747633
++/run git add .
+
+# 2024-12-16 00:23:17.748632
++/run git add .
