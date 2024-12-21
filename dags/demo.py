@@ -11,7 +11,7 @@ with DAG(dag_id="demo", start_date=datetime(2022, 1, 1), schedule="40 * * * *", 
 
     @task()
     def airflow():
-        print("airflow")
+        return("airflow")
 
     # Set dependencies between tasks
     hello >> airflow()
