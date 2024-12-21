@@ -47,11 +47,17 @@ services:
     image: apache/airflow:2.6.3
     environment:
       AIRFLOW__CORE__EXECUTOR: CeleryExecutor
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'WEnN4kNtuSmRwJC6RZenXg=='
       AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'WEnN4kNtuSmRwJC6RZenXg=='
       AIRFLOW__CELERY__RESULT_BACKEND: db+postgresql://airflow:airflow@postgres/airflow
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'WEnN4kNtuSmRwJC6RZenXg=='
       AIRFLOW__CELERY__BROKER_URL: redis://redis:6379/0
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'WEnN4kNtuSmRwJC6RZenXg=='
       AIRFLOW__CORE__FERNET_KEY: 'ZmDfcTF7_60GrrY167zsiPd67pEvs0aGOv2oasOM1Pg='
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'WEnN4kNtuSmRwJC6RZenXg=='
       AIRFLOW__CORE__LOAD_EXAMPLES: 'false'
+      AIRFLOW__WEBSERVER__SECRET_KEY: 'WEnN4kNtuSmRwJC6RZenXg=='
     volumes:
       - ./dags:/opt/airflow/dags
     depends_on:
