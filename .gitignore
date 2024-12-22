@@ -1,2 +1,4 @@
 .aider*
 .env
+.aider.tags.cache.v3/
+dags/__pycache__/
