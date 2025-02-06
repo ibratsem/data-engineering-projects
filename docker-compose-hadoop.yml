@@ -1,0 +1,70 @@
+services:
+  namenode:
+    image: apache/hadoop:3.3.6
+    container_name: namenode
+    hostname: namenode
+    ports:
+      - "9870:9870"  # HDFS Web UI
+      - "9000:9000"  # HDFS
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+    volumes:
+      - namenode:/hadoop/dfs/name
+
+  datanode:
+    image: apache/hadoop:3.3.6
+    container_name: datanode
+    hostname: datanode
+    depends_on:
+      - namenode
+    ports:
+      - "9864:9864"  # DataNode Web UI
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+    volumes:
+      - datanode:/hadoop/dfs/data
+
+  resourcemanager:
+    image: apache/hadoop:3.3.6
+    container_name: resourcemanager
+    hostname: resourcemanager
+    depends_on:
+      - namenode
+    ports:
+      - "8088:8088"  # YARN Web UI
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+  nodemanager:
+    image: apache/hadoop:3.3.6
+    container_name: nodemanager
+    hostname: nodemanager
+    depends_on:
+      - resourcemanager
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+
+  spark:
+    image: bitnami/spark:3.3.1
+    container_name: spark
+    environment:
+      - SPARK_MASTER=spark://spark:7077
+      - SPARK_MODE=master
+      - SPARK_HOME=/opt/bitnami/spark
+      - JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+    ports:
+      - "8080:8080"  # Spark Web UI
+    depends_on:
+      - namenode
+      - resourcemanager
+    volumes:
+      - spark:/opt/bitnami/spark
+
+volumes:
+  namenode:
+  datanode:
+  spark:
