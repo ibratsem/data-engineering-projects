@@ -1,4 +1,5 @@
 #!/bin/bash
+# This entrypoint script starts the appropriate Hadoop service based on the argument provided.
 set -e
 
 case "$1" in
