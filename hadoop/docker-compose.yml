@@ -4,7 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: namenode
+    container_name: ibra_hadoop_namenode
     hostname: namenode
     ports:
       - "9000:9000"    # HDFS port
@@ -20,7 +20,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: datanode
+    container_name: ibra_hadoop_datanode
     hostname: datanode
     depends_on:
       - namenode
@@ -37,7 +37,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: resourcemanager
+    container_name: ibra_hadoop_resourcemanager
     hostname: resourcemanager
     depends_on:
       - namenode
@@ -53,7 +53,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: nodemanager
+    container_name: ibra_hadoop_nodemanager
     hostname: nodemanager
     depends_on:
       - resourcemanager
@@ -65,7 +65,7 @@ services:
 
   spark:
     image: bitnami/spark:3.3.1
-    container_name: spark
+    container_name: ibra_hadoop_spark
     hostname: spark
     ports:
       - "8080:8080"    # Spark Web UI
