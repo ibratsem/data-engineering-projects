@@ -1,0 +1,84 @@
+version: "3.8"
+services:
+  namenode:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: namenode
+    hostname: namenode
+    ports:
+      - "9000:9000"    # HDFS port
+      - "9870:9870"    # HDFS Web UI
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+      - JAVA_HOME=${JAVA_HOME}
+    volumes:
+      - namenode:/hadoop/dfs/name
+      - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
+
+  datanode:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: datanode
+    hostname: datanode
+    depends_on:
+      - namenode
+    ports:
+      - "9864:9864"    # DataNode Web UI
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+      - JAVA_HOME=${JAVA_HOME}
+    volumes:
+      - datanode:/hadoop/dfs/data
+      - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
+
+  resourcemanager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: resourcemanager
+    hostname: resourcemanager
+    depends_on:
+      - namenode
+    ports:
+      - "8088:8088"    # YARN ResourceManager UI
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+      - JAVA_HOME=${JAVA_HOME}
+    volumes:
+      - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
+
+  nodemanager:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nodemanager
+    hostname: nodemanager
+    depends_on:
+      - resourcemanager
+    environment:
+      - CLUSTER_NAME=hadoop-cluster
+      - JAVA_HOME=${JAVA_HOME}
+    volumes:
+      - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
+
+  spark:
+    image: bitnami/spark:3.3.1
+    container_name: spark
+    hostname: spark
+    ports:
+      - "8080:8080"    # Spark Web UI
+    environment:
+      - SPARK_MASTER=spark://spark:7077
+      - SPARK_MODE=master
+      - SPARK_HOME=/opt/bitnami/spark
+      - JAVA_HOME=${JAVA_HOME}
+    depends_on:
+      - namenode
+      - resourcemanager
+
+volumes:
+  namenode:
+  datanode:
+  spark:
