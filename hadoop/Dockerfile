@@ -21,7 +21,7 @@ RUN wget https://downloads.apache.org/hadoop/common/hadoop-${HADOOP_VERSION}/had
 COPY config/hadoop/ ${HADOOP_HOME}/etc/hadoop/
 
 # Copy the entrypoint script and set execution permissions
-COPY entrypoint.sh /entrypoint.sh
+COPY hadoop/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
 
 # Set the default command to start the namenode (can be overridden by docker-compose)
