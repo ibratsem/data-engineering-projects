@@ -2,8 +2,8 @@ version: "3.8"
 services:
   namenode:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: hadoop/Dockerfile
     container_name: ibra_hadoop_namenode
     hostname: namenode
     ports:
@@ -18,8 +18,8 @@ services:
 
   datanode:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: hadoop/Dockerfile
     container_name: ibra_hadoop_datanode
     hostname: datanode
     depends_on:
@@ -35,8 +35,8 @@ services:
 
   resourcemanager:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: hadoop/Dockerfile
     container_name: ibra_hadoop_resourcemanager
     hostname: resourcemanager
     depends_on:
@@ -51,8 +51,8 @@ services:
 
   nodemanager:
     build:
-      context: .
-      dockerfile: Dockerfile
+      context: ..
+      dockerfile: hadoop/Dockerfile
     container_name: ibra_hadoop_nodemanager
     hostname: nodemanager
     depends_on:
