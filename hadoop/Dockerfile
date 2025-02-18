@@ -23,6 +23,7 @@ COPY config/hadoop/ ${HADOOP_HOME}/etc/hadoop/
 # Copy the entrypoint script and set execution permissions
 COPY hadoop/entrypoint.sh /entrypoint.sh
 RUN chmod +x /entrypoint.sh
+RUN sed -i 's/\r$//' /entrypoint.sh
 
 # Set the default command to start the namenode (can be overridden by docker-compose)
 ENTRYPOINT ["/entrypoint.sh"]
