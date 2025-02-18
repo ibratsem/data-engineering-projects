@@ -63,7 +63,9 @@ services:
       - ./config/hadoop:/opt/hadoop/etc/hadoop:ro
 
   spark:
-    image: bitnami/spark:3.3.1
+    build:
+      context: hadoop/spark
+      dockerfile: Dockerfile
     container_name: ibra_hadoop_spark
     hostname: spark
     ports:
@@ -72,7 +74,6 @@ services:
       - SPARK_MASTER=spark://spark:7077
       - SPARK_MODE=master
       - SPARK_HOME=/opt/bitnami/spark
-      - JAVA_HOME=${JAVA_HOME}
     depends_on:
       - namenode
       - resourcemanager
