@@ -12,7 +12,7 @@ services:
     volumes:
       - namenode:/hadoop/dfs/name
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:9870"]
+      test: ["CMD-SHELL", "curl -sf http://localhost:9870/jmx | grep -q 'NameNodeStatus' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 5
