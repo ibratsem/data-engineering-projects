@@ -49,7 +49,8 @@ services:
       - CORE_CONF_fs_defaultFS=hdfs://namenode:9000
       - YARN_CONF_yarn_resourcemanager_hostname=resourcemanager
     depends_on:
-      - resourcemanager
+      resourcemanager:
+        condition: service_started
 
   historyserver:
     image: bde2020/hadoop-historyserver:2.0.0-hadoop3.2.1-java8
@@ -87,7 +88,8 @@ services:
     environment:
       - SPARK_MASTER=spark://spark-master:7077
     depends_on:
-      - spark-master
+      spark-master:
+        condition: service_started
 
 volumes:
   namenode:
