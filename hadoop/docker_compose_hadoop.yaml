@@ -32,3 +32,14 @@ services:
     command: ["yarn", "nodemanager"]
     env_file:
       - ./config
+
+  jupyter:
+    image: jupyter/pyspark-notebook:latest
+    container_name: jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/jovyan/work
+    environment:
+      - SPARK_HOME=/usr/local/spark
+      - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
