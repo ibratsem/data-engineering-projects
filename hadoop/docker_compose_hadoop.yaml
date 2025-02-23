@@ -43,3 +43,15 @@ services:
     environment:
       - SPARK_HOME=/usr/local/spark
       - HADOOP_CONF_DIR=/opt/hadoop/etc/hadoop
+
+  hive:
+    image: bde2020/hive:2.3.2
+    container_name: hive
+    depends_on:
+      - namenode
+      - datanode
+    ports:
+      - "10000:10000"
+      - "9083:9083"
+    environment:
+      - HIVE_METASTORE_URI=thrift://hive:9083
