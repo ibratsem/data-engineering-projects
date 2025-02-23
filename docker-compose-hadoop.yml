@@ -7,6 +7,7 @@ services:
       - "9000:9000"  # HDFS
     environment:
       - CLUSTER_NAME=ibra-hadoop-cluster
+      - FORMAT_NAMENODE=true
     volumes:
       - namenode:/hadoop/dfs/name
     healthcheck:
