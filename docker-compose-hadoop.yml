@@ -14,8 +14,8 @@ services:
       test: ["CMD-SHELL", "curl -sf http://localhost:9870/jmx?qry=Hadoop:service=NameNode,name=FSNamesystem | grep -q BlockPoolId || exit 1"]
       interval: 30s
       timeout: 10s
-      retries: 5
-      start_period: 120s
+      retries: 10
+      start_period: 300s
 
   datanode:
     image: bde2020/hadoop-datanode:2.0.0-hadoop3.2.1-java8
