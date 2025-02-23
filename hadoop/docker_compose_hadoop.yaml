@@ -55,3 +55,24 @@ services:
       - "9083:9083"
     environment:
       - HIVE_METASTORE_URI=thrift://hive:9083
+
+  spark-master:
+    image: bitnami/spark:3.3.0
+    container_name: spark-master
+    environment:
+      - SPARK_MODE=master
+    ports:
+      - "7077:7077"
+      - "8080:8080"
+    depends_on:
+      - namenode
+      - datanode
+
+  spark-worker:
+    image: bitnami/spark:3.3.0
+    container_name: spark-worker
+    environment:
+      - SPARK_MODE=worker
+      - SPARK_MASTER_URL=spark://spark-master:7077
+    depends_on:
+      - spark-master
