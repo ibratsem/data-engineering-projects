@@ -43,6 +43,29 @@ dim_partytoparty as (
          max(case when parentgroup = 'PartyGroup_1011' then code end) as dprtm_code
     from custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period
     group by org_sid
+),
+dim_fin as (
+    select 
+         org_sid,
+         max(case when name = 'bicCode' then fin_code_value end) as org_bic_num,
+         max(class_cred) as cred_worthiness_class_code,
+         max(statement_date) as org_on_montrg_start_dt,
+         max(modify_date) as last_fin_montrg_dt
+    from (
+         select org_sid, fin_code_value, null as class_cred, null as statement_date, null as modify_date
+         from custom_risk_cust_org_stg.s_counterparty_epk_financialinstitutecode_full_period
+         where name = 'bicCode'
+         union all
+         select epk_id as org_sid, null, class_cred, null, null
+         from custom_risk_cust_org_stg.s_fok_class_cred
+         union all
+         select client_id as org_sid, null, null, statement_date, null
+         from custom_risk_cust_org_stg.s_dis_clients_on_montrng
+         union all
+         select divid as org_sid, null, null, null, modify_date
+         from custom_risk_cust_org_stg.s_fok_last_fin_montrg_dt
+    ) t
+    group by org_sid
 )
 /* %%EndOfWithBlock=1 */
 
@@ -321,7 +344,7 @@ from (
         ,gsz.org_include_gsz_dttm                                         as org_include_gsz_dttm    
         ,dparty.friend_name                                               as cust_org_friendly_name
         ,mngr.cust_mngr_tab_num                                           as cust_mngr_tab_num
-        ,fincode.fin_code_value                                           as org_bic_num
+        ,df.org_bic_num                                                  as org_bic_num
         ,report.eqvl_org_sid                                              as org_epk_report_sid
 
     from custom_risk_cust_org_stg.s_counterparty_epk_organization org
