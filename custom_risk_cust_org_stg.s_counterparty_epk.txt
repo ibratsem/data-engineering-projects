@@ -310,30 +310,30 @@ from (
         left join custom_risk_cust_org_stg.s_counterparty_epk_orgnames_full_period shortnm
             on  org.id           = shortnm.org_sid
             and shortnm.nametype = 'NameType_9'
-            and not(org.startdate > shortnm.enddate or org.enddate < shortnm.startdate)
+            and org.startdate <= shortnm.enddate and org.enddate >= shortnm.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_orgnames_full_period fullnm
             on  org.id          = fullnm.org_sid
             and fullnm.nametype = 'NameType_8'
-            and not(org.startdate > fullnm.enddate or org.enddate < fullnm.startdate)
+            and org.startdate <= fullnm.enddate and org.enddate >= fullnm.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_ogrn_full_period ogrn
             on  org.id = ogrn.org_sid
-            and not(org.startdate > ogrn.enddate or org.enddate < ogrn.startdate)
+            and org.startdate <= ogrn.enddate and org.enddate >= ogrn.startdate
 		left join custom_risk_cust_org_stg.s_counterparty_epk_lei_full_period lei
             on  org.id = lei.org_sid
             and not(org.startdate > lei.enddate or org.enddate < lei.startdate)	
         left join custom_risk_cust_org_stg.s_counterparty_epk_inn_full_period inn
             on  org.id = inn.org_sid
-            and not(org.startdate > inn.enddate or org.enddate < inn.startdate)
+            and org.startdate <= inn.enddate and org.enddate >= inn.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_addresses_full_period addr
             on  org.id          = addr.org_sid
             and addr.usage_type = 'ContactUsageType_6'                              -- Юридический адрес
-            and not(org.startdate > addr.enddate or org.enddate < addr.startdate)
+            and org.startdate <= addr.enddate and org.enddate >= addr.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_crmattr_full_period crmattr
             on  org.id = crmattr.org_sid
-            and not(org.startdate > crmattr.enddate or org.enddate < crmattr.startdate)
+            and org.startdate <= crmattr.enddate and org.enddate >= crmattr.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_specreq_full_period specreq
             on  org.id = specreq.org_sid
-            and not(org.startdate > specreq.enddate or org.enddate < specreq.startdate)
+            and org.startdate <= specreq.enddate and org.enddate >= specreq.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_eqvl_full_period report
             on  org.id                 = report.org_sid
             and report.ext_system_name = 'EquivalentSystemType_1024'
@@ -350,44 +350,44 @@ from (
         -- BROADCAST    
         left join custom_risk_cust_org_stg.s_counterparty_epk_nonrsdtaxreq_full_period nonrsdtax
             on  org.id = nonrsdtax.org_sid
-            and not(org.startdate > nonrsdtax.enddate or org.enddate < nonrsdtax.startdate)
+            and org.startdate <= nonrsdtax.enddate and org.enddate >= nonrsdtax.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_nonrsdreg_full_period nonrsdreg 
             on  org.id = nonrsdreg.org_sid
-            and not(org.startdate > nonrsdreg.enddate or org.enddate < nonrsdreg.startdate)
+            and org.startdate <= nonrsdreg.enddate and org.enddate >= nonrsdreg.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period bitl
             on  org.id           = bitl.org_sid
             and bitl.parentgroup = 'PartyGroup_1010'
-            and not(org.startdate > bitl.enddate or org.enddate < bitl.startdate)
+            and org.startdate <= bitl.enddate and org.enddate >= bitl.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period friend
             on  org.id             = friend.org_sid
             and friend.parentgroup = 'PartyGroup_510'
-            and not(org.startdate > friend.enddate or org.enddate < friend.startdate)
+            and org.startdate <= friend.enddate and org.enddate >= friend.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period dprtm
             on  org.id            = dprtm.org_sid
             and dprtm.parentgroup = 'PartyGroup_1011'
-            and not(org.startdate > dprtm.enddate or org.enddate < dprtm.startdate)
+            and org.startdate <= dprtm.enddate and org.enddate >= dprtm.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_orgnames_full_period othernm
             on  org.id           = othernm.org_sid
             and othernm.nametype = 'NameType_7'
-            and not(org.startdate > othernm.enddate or org.enddate < othernm.startdate)
+            and org.startdate <= othernm.enddate and org.enddate >= othernm.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_financialinstitutecode_full_period fincode
             on  org.id       = fincode.org_sid
             and fincode.name = 'bicCode'
-            and not(org.startdate > fincode.enddate or org.enddate < fincode.startdate)
+            and org.startdate <= fincode.enddate and org.enddate >= fincode.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_relations_full_period rel_2
             on  org.id              = rel_2.org_sid
             and rel_2.relation_type = 'PartyRelatedRole_50'
-            and not(org.startdate > rel_2.enddate or org.enddate < rel_2.startdate)
+            and org.startdate <= rel_2.enddate and org.enddate >= rel_2.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_relations_full_period rel
             on  org.id            = rel.org_sid
             and rel.relation_type = 'PartyRelatedRole_49'
-            and not(org.startdate > rel.enddate or org.enddate < rel.startdate)
+            and org.startdate <= rel.enddate and org.enddate >= rel.startdate
         left join custom_risk_cust_org_stg.s_fok_class_cred cl_cred                               -- stg по ФОК
             on  org.id = cl_cred.epk_id
             and not(org.startdate > cl_cred.effectiveto or org.enddate < cl_cred.effectivefrom)
         left join custom_risk_cust_org_stg.s_fok_last_fin_montrg_dt fmdt
             on  org.id = fmdt.divid
-            and not(org.startdate > fmdt.effectiveto or org.enddate < fmdt.effectivefrom)
+            and org.startdate <= fmdt.effectiveto and org.enddate >= fmdt.effectivefrom
         left join custom_risk_cust_org_stg.s_dis_clients_on_montrng com                           -- stg по ДИС
             on  org.id = com.client_id
             and not(org.startdate > com.effectiveto or org.enddate < com.effectivefrom)
