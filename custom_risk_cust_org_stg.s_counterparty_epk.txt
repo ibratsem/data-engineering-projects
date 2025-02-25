@@ -84,6 +84,51 @@ dim_small as (
          from custom_risk_cust_org_stg.s_party_organization_identification_otherregistrationnumber
     ) s
     group by org_sid
+),
+dim_nonrsd as (
+    select 
+         org_sid,
+         max(case when source = 'tax' then nonrsd_tax_reg_dt end) as nonrsd_tax_reg_dt,
+         max(case when source = 'tax' then nonrsd_tax_reg_name end) as nonrsd_tax_reg_name,
+         max(case when source = 'reg' then nonrsd_reg_dt end) as nonrsd_reg_dt,
+         max(case when source = 'reg' then nonrsd_reg_name end) as nonrsd_reg_name
+    from (
+         select org_sid, nonrsd_org_cntry_rsdnt_tax_reg_dt as nonrsd_tax_reg_dt, nonrsd_org_cntry_rsdnt_tax_gov_org_reg_name as nonrsd_tax_reg_name, null as nonrsd_reg_dt, null as nonrsd_reg_name, 'tax' as source
+         from custom_risk_cust_org_stg.s_counterparty_epk_nonrsdtaxreq_full_period
+         union all
+         select org_sid, null, null, nonrsd_org_cntry_rsdnt_reg_dt as nonrsd_reg_dt, nonrsd_org_gov_org_reg_name as nonrsd_reg_name, 'reg' as source
+         from custom_risk_cust_org_stg.s_counterparty_epk_nonrsdreg_full_period
+    ) t
+    group by org_sid
+),
+dim_crmattr as (
+    select
+         org_sid,
+         max(activity_type_name) as activity_type_name,
+         max(org_acssr_type_name) as org_acssr_type_name,
+         max(segment) as segment,
+         max(x_macro_industry) as x_macro_industry,
+         max(x_sub_industry) as x_sub_industry,
+         max(x_okk_code) as x_okk_code,
+         max(cust_org_clbrt_type_name) as cust_org_clbrt_type_name,
+         max(startdate) as crm_startdate,
+         max(enddate) as crm_enddate,
+         max(keyclient_flag) as keyclient_flag
+    from custom_risk_cust_org_stg.s_counterparty_epk_crmattr_full_period
+    group by org_sid
+),
+dim_specreq as (
+    select
+         org_sid,
+         max(kio) as kio,
+         max(kpp_num) as kpp_num,
+         max(cust_liquidation_type_name) as cust_liquidation_type_name,
+         max(cust_org_bnkpcy_flag) as cust_org_bnkpcy_flag,
+         max(bnkpcy_stage_code) as bnkpcy_stage_code,
+         max(startdate) as specreq_startdate,
+         max(enddate) as specreq_enddate
+    from custom_risk_cust_org_stg.s_counterparty_epk_specreq_full_period
+    group by org_sid
 )
 /* %%EndOfWithBlock=1 */
 
