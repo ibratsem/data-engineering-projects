@@ -1,0 +1,9 @@
+Using UNION ALL in the dim_fin and dim_small CTEs serves several purposes:
+
+1. It combines rows from multiple source tables without performing duplicate elimination, which is more efficient than using UNION (which implicitly does duplicate removal). This is beneficial when the input datasets are known to have distinct records or when duplicate removal is unnecessary.
+
+2. Each source table in the UNION ALL contributes rows that share a common structure (e.g., org_sid along with a financial metric or identification attribute). Later, a GROUP BY (with an aggregate function like MAX) is applied on org_sid to consolidate these values. This lets us pick the desired value per organization without losing any potential matches.
+
+3. In a Hadoop/Hive environment, efficiency is crucial. UNION ALL minimizes additional processing overhead by avoiding the cost of checking for duplicates, allowing the optimizer to execute the query more quickly.
+
+Overall, using UNION ALL provides a simple and performant way to merge data from several small tables into a single dataset for further aggregation.
