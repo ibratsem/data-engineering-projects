@@ -1,0 +1,7 @@
+In my opinion, using UNION ALL (combined with aggregation) is generally faster than performing FULL JOINs in this scenario.
+  
+UNION ALL simply appends the rows from each table without the overhead of matching rows across tables or dealing with nulls from non-matching keys. This minimization of overhead is particularly beneficial in Hive when working with small, low‐cardinality tables — as it reduces data shuffling and processing cost.
+  
+In contrast, FULL JOINs require the engine to align rows from both tables, handle unmatched rows, and manage a larger intermediate result set, which can be more expensive in a distributed processing environment.
+  
+Thus, if your goal is simply to merge data from small tables for later aggregation, UNION ALL with a GROUP BY (such as using MAX over each column) is typically the more efficient approach.
