@@ -1,0 +1,401 @@
+/* %%BeginOfWithBlock=1 */
+with 
+
+cg_int as (
+	select 
+		 grccust_sid as key
+		,grccust_name as name
+		,to_date('1900-01-01') as effectivefrom
+		,to_date('9999-12-31') as effectiveto
+	from arnsdprisk__custom_risk_cust_org_stg.stg_t_grccust_2
+	where effectivefrom <= effectiveto and effectiveto = cast('9999-12-31' as timestamp) and src_sys_id = 2
+),
+
+step0 as (
+	select
+		 ca.epkid
+		,case when                                   to_date(ca.start_dt)  >= coalesce(to_date(cg.effectivefrom), to_date(ca.start_dt)) then ca.start_dt else cg.effectivefrom end as start_dt
+		,case when coalesce(to_date(cg.effectiveto), to_date(ca.end_dt  )) >=                                     to_date(ca.end_dt  )  then ca.end_dt   else cg.effectiveto   end as end_dt
+		,cg.key as kgroup
+		,cg.name
+	from arnsdprisk__custom_risk_cust_org_stg.stg_cnsld_group_step3 ca
+		left join cg_int cg
+			on  ca.kgroup = cg.key
+			and ca.kgroup is not null
+			and cg.key    is not null
+			and to_date(ca.start_dt) <= to_date(cg.effectiveto  )
+			and to_date(ca.end_dt  ) >= to_date(cg.effectivefrom)
+)
+/* %%EndOfWithBlock=1 */
+
+select 
+     org_id
+    ,activity_type_name 
+    ,create_dt
+    ,inn
+    ,kio
+    ,okved_cd
+    ,okved_name
+    ,org_strc_type_name 
+    ,okopf_name
+    ,full_name
+    ,org_acssr_type_name
+    ,segment
+    ,org_card_type_name
+    ,org_rsd_type_name
+    ,ogrn_dt              
+    ,kpp_num
+    ,cust_org_clbrt_type_name
+    ,cntry_name
+    ,master_cust_org_id
+    ,gsz_id                  
+    ,cntry_iso3_cd
+    ,x_macro_industry 
+    ,x_sub_industry  
+    ,x_okk_code
+    ,effectivefrom
+    ,effectiveto
+    ,cust_org_cred_type_name
+    ,host_reg_bank_int_org_id
+    ,org_reg_n  
+    ,org_tax_n
+    ,holding_company_id     
+    ,x_sector 
+    ,belonging
+    ,ogrn
+	,org_lei_num 	
+    ,keyclient_flag    
+    ,grccust_name
+    ,short_name
+    ,grccust_sid
+    ,cust_liquidation_type_name
+    ,cust_gsz_stts_type_name   
+    ,cover_dep_sid
+    ,locty_okato_code
+    ,cust_org_bnkpcy_flag
+    ,bnkpcy_stage_code
+    ,cust_org_locty_name
+    ,cust_org_house_num
+    ,cust_org_office_num
+    ,cust_org_addr_fias_num
+    ,cntry_oksm_code
+    ,cust_org_other_name
+    ,cust_org_street_name
+    ,cust_org_blk_num
+    ,cust_org_bld_num
+    ,cred_worthiness_class_code
+    ,org_on_montrg_start_dt
+    ,last_fin_montrg_dt  
+    ,cover_sber_dprtmt_name
+    ,nonrsd_org_cntry_rsdn_reg_dt
+    ,nonrsd_org_gov_org_reg_name  
+    ,nonrsd_org_cntry_rsdn_tax_reg_dt
+    ,nonrsd_org_cntry_rsdn_tax_gov_org_name
+    ,org_ctgry_name
+    ,org_busn_insider_flag
+    ,org_gov_org_reg_name
+    ,org_include_gsz_dttm    
+    ,cust_org_friendly_name
+    ,cust_mngr_tab_num
+    ,org_bic_num
+    ,org_epk_report_sid
+    ,sha2(concat_ws('#'
+	   ,coalesce(activity_type_name                         , 'null_row')
+	   ,coalesce(create_dt                                  , 'null_row')
+	   ,coalesce(inn                                        , 'null_row')
+	   ,coalesce(kio                                        , 'null_row')
+	   ,coalesce(okved_cd                                   , 'null_row')
+	   ,coalesce(okved_name                                 , 'null_row')
+	   ,coalesce(org_strc_type_name                         , 'null_row')
+	   ,coalesce(okopf_name                                 , 'null_row')
+	   ,coalesce(full_name                                  , 'null_row')
+	   ,coalesce(org_acssr_type_name                        , 'null_row')
+	   ,coalesce(segment                                    , 'null_row')
+	   ,coalesce(org_card_type_name                         , 'null_row')
+	   ,coalesce(org_rsd_type_name                          , 'null_row')
+	   ,coalesce(ogrn_dt                                    , 'null_row')
+	   ,coalesce(kpp_num                                    , 'null_row')
+	   ,coalesce(cust_org_clbrt_type_name                   , 'null_row')
+	   ,coalesce(cntry_name                                 , 'null_row')
+	   ,coalesce(master_cust_org_id                         , 'null_row')
+	   ,coalesce(gsz_id                                     , 'null_row')
+	   ,coalesce(cntry_iso3_cd                              , 'null_row')
+	   ,coalesce(x_macro_industry                           , 'null_row')
+	   ,coalesce(x_sub_industry                             , 'null_row')
+	   ,coalesce(x_okk_code                                 , 'null_row')
+	   ,coalesce(cust_org_cred_type_name                    , 'null_row')
+	   ,coalesce(host_reg_bank_int_org_id                   , 'null_row')
+	   ,coalesce(org_reg_n                                  , 'null_row')
+	   ,coalesce(org_tax_n                                  , 'null_row')
+	   ,coalesce(holding_company_id                         , 'null_row')
+	   ,coalesce(x_sector                                   , 'null_row')
+	   ,coalesce(belonging                                  , 'null_row')
+	   ,coalesce(ogrn                                       , 'null_row')
+	   ,coalesce(org_lei_num                                , 'null_row')
+	   ,coalesce(keyclient_flag                             , 'null_row')
+	   ,coalesce(grccust_name                               , 'null_row')
+	   ,coalesce(short_name                                 , 'null_row')
+	   ,coalesce(grccust_sid                                , 'null_row')
+	   ,coalesce(cust_liquidation_type_name                 , 'null_row')
+	   ,coalesce(cust_gsz_stts_type_name                    , 'null_row')
+	   ,coalesce(cover_dep_sid                              , 'null_row')
+	   ,coalesce(locty_okato_code                           , 'null_row')
+	   ,coalesce(cust_org_bnkpcy_flag                       , 'null_row')
+	   ,coalesce(bnkpcy_stage_code                          , 'null_row')
+	   ,coalesce(cust_org_locty_name                        , 'null_row')
+	   ,coalesce(cust_org_house_num                         , 'null_row')
+	   ,coalesce(cust_org_office_num                        , 'null_row')
+	   ,coalesce(cust_org_addr_fias_num                     , 'null_row')
+	   ,coalesce(cntry_oksm_code                            , 'null_row')
+	   ,coalesce(cust_org_other_name                        , 'null_row')
+	   ,coalesce(cust_org_street_name                       , 'null_row')
+	   ,coalesce(cust_org_blk_num                           , 'null_row')
+	   ,coalesce(cust_org_bld_num                           , 'null_row')
+	   ,coalesce(cred_worthiness_class_code                 , 'null_row')
+	   ,coalesce(org_on_montrg_start_dt                     , 'null_row')
+	   ,coalesce(last_fin_montrg_dt                         , 'null_row')
+	   ,coalesce(cover_sber_dprtmt_name                     , 'null_row')
+	   ,coalesce(nonrsd_org_cntry_rsdn_reg_dt               , 'null_row')
+	   ,coalesce(nonrsd_org_gov_org_reg_name                , 'null_row')
+	   ,coalesce(nonrsd_org_cntry_rsdn_tax_reg_dt           , 'null_row')
+	   ,coalesce(nonrsd_org_cntry_rsdn_tax_gov_org_name     , 'null_row')
+	   ,coalesce(org_ctgry_name                             , 'null_row')
+	   ,coalesce(org_busn_insider_flag                      , 'null_row')
+	   ,coalesce(org_gov_org_reg_name                       , 'null_row')
+	   ,coalesce(org_include_gsz_dttm                       , 'null_row')
+	   ,coalesce(cust_org_friendly_name                     , 'null_row')
+	   ,coalesce(cust_mngr_tab_num                          , 'null_row')
+	   ,coalesce(org_bic_num                                , 'null_row')
+	   ,coalesce(org_epk_report_sid                         , 'null_row')
+	), 256) as business_hash                                                       
+
+from (
+    select /*+ BROADCAST(fincode, dprtm, nonrsdreg, othernm, gsz, nonrsdtax
+                        ,com, fmdt, bitl, friend, pst, rel, rel_2, cg, cl_cred) */
+         org.id                                                           as org_id
+        ,crmattr.activity_type_name                                       as activity_type_name 
+        ,org.startdate                                                    as create_dt
+        ,inn.inn                                                          as inn
+        ,specreq.kio                                                      as kio
+        ,okved.okved_cd                                                   as okved_cd
+        ,okved.okved_nm                                                   as okved_name
+        ,crmattr.org_strc_type_name                                       as org_strc_type_name 
+        ,org.okopf_name                                                   as okopf_name
+        ,fullnm.name                                                      as full_name
+        ,crmattr.org_acssr_type_name                                      as org_acssr_type_name
+        ,crmattr.segment                                                  as segment
+        ,org.org_card_type_name                                           as org_card_type_name
+        ,case
+            when org.code  = 181                                       then 'Резидент'
+            when org.code != 181 and specreq.russian_business_flag = 1 then 'Нерезидент, работает в РФ'
+            when org.code != 181 and specreq.russian_business_flag = 0 then 'Нерезидент, не работает в РФ'
+            else null
+         end                                                              as org_rsd_type_name
+        ,ogrn.ogrn_dt                                                     as ogrn_dt              
+        ,specreq.kpp_num                                                  as kpp_num
+        ,crmattr.cust_org_clbrt_type_name                                 as cust_org_clbrt_type_name
+        ,addr.addr_cntry_name                                             as cntry_name                 --изменено 19.09.2023
+        ,rel.parent_org_sid                                              as master_cust_org_id
+        ,gsz.gsz_sid                                                      as gsz_id       
+        ,org.cntry_iso3_cd                                                as cntry_iso3_cd              
+        ,crmattr.x_macro_industry                                         as x_macro_industry 
+        ,crmattr.x_sub_industry                                           as x_sub_industry  
+        ,crmattr.x_okk_code                                               as x_okk_code                 
+        ,greatest(
+			 org.startdate
+			,coalesce(shortnm.startdate    , timestamp('1900-01-01'))
+			,coalesce(fullnm.startdate     , timestamp('1900-01-01'))
+			,coalesce(ogrn.startdate       , timestamp('1900-01-01'))
+			,coalesce(lei.startdate        , timestamp('1900-01-01'))
+			,coalesce(inn.startdate        , timestamp('1900-01-01'))
+			,coalesce(addr.startdate       , timestamp('1900-01-01'))
+			,coalesce(crmattr.startdate    , timestamp('1900-01-01'))
+			,coalesce(specreq.startdate    , timestamp('1900-01-01'))
+			,coalesce(rel.startdate        , timestamp('1900-01-01'))
+			,coalesce(rel_2.startdate      , timestamp('1900-01-01'))
+			,coalesce(cg.start_dt          , timestamp('1900-01-01'))
+			,coalesce(gsz.start_dt         , timestamp('1900-01-01'))
+			,coalesce(com.effectivefrom    , timestamp('1900-01-01'))
+			,coalesce(cl_cred.effectivefrom, timestamp('1900-01-01'))
+			,coalesce(fmdt.effectivefrom   , timestamp('1900-01-01'))
+			,coalesce(nonrsdtax.startdate  , timestamp('1900-01-01'))
+			,coalesce(nonrsdreg.startdate  , timestamp('1900-01-01'))
+			,coalesce(bitl.startdate       , timestamp('1900-01-01'))
+			,coalesce(friend.startdate     , timestamp('1900-01-01'))
+			,coalesce(othernm.startdate    , timestamp('1900-01-01'))
+			,coalesce(mngr.startdate       , timestamp('1900-01-01'))
+			,coalesce(tb.startdate         , timestamp('1900-01-01'))
+			,coalesce(dprtm.startdate      , timestamp('1900-01-01'))
+			,coalesce(fincode.startdate    , timestamp('1900-01-01'))
+			,coalesce(okved.startdate      , timestamp('1900-01-01'))
+			,coalesce(report.startdate     , timestamp('1900-01-01'))
+		)                                                                 as effectivefrom
+        
+        ,least(
+			 org.enddate
+			,coalesce(shortnm.enddate    , timestamp('9999-12-31'))
+			,coalesce(fullnm.enddate     , timestamp('9999-12-31'))
+			,coalesce(ogrn.enddate       , timestamp('9999-12-31'))
+			,coalesce(lei.enddate        , timestamp('9999-12-31'))
+			,coalesce(inn.enddate        , timestamp('9999-12-31'))
+			,coalesce(addr.enddate       , timestamp('9999-12-31'))
+			,coalesce(crmattr.enddate    , timestamp('9999-12-31'))
+			,coalesce(specreq.enddate    , timestamp('9999-12-31'))
+			,coalesce(rel.enddate        , timestamp('9999-12-31'))
+			,coalesce(rel_2.enddate      , timestamp('9999-12-31'))
+			,coalesce(cg.end_dt          , timestamp('9999-12-31'))
+			,coalesce(gsz.end_dt         , timestamp('9999-12-31'))
+			,coalesce(com.effectiveto    , timestamp('9999-12-31'))
+			,coalesce(cl_cred.effectiveto, timestamp('9999-12-31'))
+			,coalesce(fmdt.effectiveto   , timestamp('9999-12-31'))
+			,coalesce(nonrsdtax.enddate  , timestamp('9999-12-31'))
+			,coalesce(nonrsdreg.enddate  , timestamp('9999-12-31'))
+			,coalesce(bitl.enddate       , timestamp('9999-12-31'))
+			,coalesce(friend.enddate     , timestamp('9999-12-31'))
+			,coalesce(othernm.enddate    , timestamp('9999-12-31'))
+			,coalesce(mngr.enddate       , timestamp('9999-12-31'))
+			,coalesce(tb.enddate         , timestamp('9999-12-31'))
+			,coalesce(dprtm.enddate      , timestamp('9999-12-31'))
+			,coalesce(fincode.enddate    , timestamp('9999-12-31'))
+			,coalesce(okved.enddate      , timestamp('9999-12-31'))
+			,coalesce(report.enddate     , timestamp('9999-12-31'))
+		)                                                                 as effectiveto
+        
+        ,crmattr.cust_org_cred_type_name                                  as cust_org_cred_type_name   
+        ,tb.parent_terbank_code                                           as host_reg_bank_int_org_id                   
+        ,nonrsdreg.org_reg_n                                              as org_reg_n                 
+        ,nonrsdtax.org_tax_n                                              as org_tax_n
+        ,rel_2.parent_org_sid                                            as holding_company_id        
+        ,crmattr.x_sector                                                 as x_sector 
+        ,tb.parent_terbank                                                as belonging                
+        ,ogrn.ogrn                                                        as ogrn                 
+        ,coalesce(crmattr.keyclient_flag, 0)                              as keyclient_flag                     
+        ,cg.name                                                          as grccust_name
+        ,shortnm.name                                                     as short_name         
+        ,cg.kgroup                                                        as grccust_sid  
+        ,specreq.cust_liquidation_type_name                               as cust_liquidation_type_name  
+        ,gsz.org_rel_gsz_stts_code                                        as cust_gsz_stts_type_name                 
+        ,dprtm.code                                                       as cover_dep_sid              
+        ,addr.locty_okato_code                                            as locty_okato_code   
+        ,coalesce(specreq.cust_org_bnkpcy_flag, 0)                        as cust_org_bnkpcy_flag        
+        ,specreq.bnkpcy_stage_code                                        as bnkpcy_stage_code           
+        ,coalesce(addr.city, addr.settlement)                             as cust_org_locty_name
+        ,addr.house                                                       as cust_org_house_num
+        ,addr.office                                                      as cust_org_office_num
+        ,addr.fiascode                                                    as cust_org_addr_fias_num
+        ,addr.cntry_oksm_code                                             as cntry_oksm_code
+        ,othernm.name                                                     as cust_org_other_name
+        ,concat(addr.street, ' ', addr.street_type_name)                  as cust_org_street_name
+        ,addr.bulk                                                        as cust_org_blk_num
+        ,addr.building                                                    as cust_org_bld_num
+        ,cl_cred.class_cred                                               as cred_worthiness_class_code       
+        ,com.statement_date                                               as org_on_montrg_start_dt           
+        ,fmdt.modify_date                                                 as last_fin_montrg_dt               
+        ,dprtm.name                                                       as cover_sber_dprtmt_name           
+        ,nonrsdreg.nonrsd_org_cntry_rsdnt_reg_dt                          as nonrsd_org_cntry_rsdn_reg_dt
+        ,nonrsdreg.nonrsd_org_gov_org_reg_name                            as nonrsd_org_gov_org_reg_name  
+        ,nonrsdtax.nonrsd_org_cntry_rsdnt_tax_reg_dt                      as nonrsd_org_cntry_rsdn_tax_reg_dt
+        ,nonrsdtax.nonrsd_org_cntry_rsdnt_tax_gov_org_reg_name            as nonrsd_org_cntry_rsdn_tax_gov_org_name
+        ,org.org_ctgry_name                                               as org_ctgry_name
+        ,if(bitl.name is not null, 1, 0)                                  as org_busn_insider_flag      --измененено 20.09.2023
+        ,ogrn.cust_org_reg_org_name                                       as org_gov_org_reg_name
+		,lei.org_lei_num                                                  as org_lei_num
+        ,gsz.org_include_gsz_dttm                                         as org_include_gsz_dttm    
+        ,friend.name                                                      as cust_org_friendly_name
+        ,mngr.cust_mngr_tab_num                                           as cust_mngr_tab_num
+        ,fincode.fin_code_value                                           as org_bic_num
+        ,report.eqvl_org_sid                                              as org_epk_report_sid
+
+    from custom_risk_cust_org_stg.s_counterparty_epk_organization org
+        left join custom_risk_cust_org_stg.s_counterparty_epk_orgnames_full_period shortnm
+            on  org.id           = shortnm.org_sid
+            and shortnm.nametype = 'NameType_9'
+            and not(org.startdate > shortnm.enddate or org.enddate < shortnm.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_orgnames_full_period fullnm
+            on  org.id          = fullnm.org_sid
+            and fullnm.nametype = 'NameType_8'
+            and not(org.startdate > fullnm.enddate or org.enddate < fullnm.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_ogrn_full_period ogrn
+            on  org.id = ogrn.org_sid
+            and not(org.startdate > ogrn.enddate or org.enddate < ogrn.startdate)
+		left join custom_risk_cust_org_stg.s_counterparty_epk_lei_full_period lei
+            on  org.id = lei.org_sid
+            and not(org.startdate > lei.enddate or org.enddate < lei.startdate)	
+        left join custom_risk_cust_org_stg.s_counterparty_epk_inn_full_period inn
+            on  org.id = inn.org_sid
+            and not(org.startdate > inn.enddate or org.enddate < inn.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_addresses_full_period addr
+            on  org.id          = addr.org_sid
+            and addr.usage_type = 'ContactUsageType_6'                              -- Юридический адрес
+            and not(org.startdate > addr.enddate or org.enddate < addr.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_crmattr_full_period crmattr
+            on  org.id = crmattr.org_sid
+            and not(org.startdate > crmattr.enddate or org.enddate < crmattr.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_specreq_full_period specreq
+            on  org.id = specreq.org_sid
+            and not(org.startdate > specreq.enddate or org.enddate < specreq.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_eqvl_full_period report
+            on  org.id                 = report.org_sid
+            and report.ext_system_name = 'EquivalentSystemType_1024'
+            and not(org.startdate > report.enddate or org.enddate < report.startdate) 
+        left join custom_risk_cust_org_stg.s_counterparty_epk_manageemploye_full_period mngr
+            on  org.id = mngr.org_sid
+            and not(org.startdate > mngr.enddate or org.enddate < mngr.startdate) 
+        left join custom_risk_cust_org_stg.s_counterparty_epk_terbank_full_period tb
+            on  org.id = tb.org_sid
+            and not(org.startdate > tb.enddate or org.enddate < tb.startdate) 
+        left join custom_risk_cust_org_stg.s_counterparty_epk_okved_full_period okved
+            on  org.id = okved.org_sid
+            and not(org.startdate > okved.enddate or org.enddate < okved.startdate) 
+        -- BROADCAST    
+        left join custom_risk_cust_org_stg.s_counterparty_epk_nonrsdtaxreq_full_period nonrsdtax
+            on  org.id = nonrsdtax.org_sid
+            and not(org.startdate > nonrsdtax.enddate or org.enddate < nonrsdtax.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_nonrsdreg_full_period nonrsdreg 
+            on  org.id = nonrsdreg.org_sid
+            and not(org.startdate > nonrsdreg.enddate or org.enddate < nonrsdreg.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period bitl
+            on  org.id           = bitl.org_sid
+            and bitl.parentgroup = 'PartyGroup_1010'
+            and not(org.startdate > bitl.enddate or org.enddate < bitl.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period friend
+            on  org.id             = friend.org_sid
+            and friend.parentgroup = 'PartyGroup_510'
+            and not(org.startdate > friend.enddate or org.enddate < friend.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period dprtm
+            on  org.id            = dprtm.org_sid
+            and dprtm.parentgroup = 'PartyGroup_1011'
+            and not(org.startdate > dprtm.enddate or org.enddate < dprtm.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_orgnames_full_period othernm
+            on  org.id           = othernm.org_sid
+            and othernm.nametype = 'NameType_7'
+            and not(org.startdate > othernm.enddate or org.enddate < othernm.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_financialinstitutecode_full_period fincode
+            on  org.id       = fincode.org_sid
+            and fincode.name = 'bicCode'
+            and not(org.startdate > fincode.enddate or org.enddate < fincode.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_relations_full_period rel_2
+            on  org.id              = rel_2.org_sid
+            and rel_2.relation_type = 'PartyRelatedRole_50'
+            and not(org.startdate > rel_2.enddate or org.enddate < rel_2.startdate)
+        left join custom_risk_cust_org_stg.s_counterparty_epk_relations_full_period rel
+            on  org.id            = rel.org_sid
+            and rel.relation_type = 'PartyRelatedRole_49'
+            and not(org.startdate > rel.enddate or org.enddate < rel.startdate)
+        left join custom_risk_cust_org_stg.s_fok_class_cred cl_cred                               -- stg по ФОК
+            on  org.id = cl_cred.epk_id
+            and not(org.startdate > cl_cred.effectiveto or org.enddate < cl_cred.effectivefrom)
+        left join custom_risk_cust_org_stg.s_fok_last_fin_montrg_dt fmdt
+            on  org.id = fmdt.divid
+            and not(org.startdate > fmdt.effectiveto or org.enddate < fmdt.effectivefrom)
+        left join custom_risk_cust_org_stg.s_dis_clients_on_montrng com                           -- stg по ДИС
+            on  org.id = com.client_id
+            and not(org.startdate > com.effectiveto or org.enddate < com.effectivefrom)
+        left join step0 cg                                                                        -- stg-по консгруппам
+            on  org.id = cg.epkid                                                                 
+            and not(org.startdate > cg.end_dt or org.enddate < cg.start_dt)                       
+        left join custom_risk_cust_org_stg.s_gsz_x_org gsz                                        -- stg-по ГСЗ             --изменено 19.09.2023
+            on  org.id = gsz.org_epk_sid 
+            and not(org.startdate > gsz.end_dt or org.enddate < gsz.start_dt)
+) t
+where effectiveto >= effectivefrom
