@@ -5,3 +5,5 @@ UNION ALL simply appends the rows from each table without the overhead of matchi
 In contrast, FULL JOINs require the engine to align rows from both tables, handle unmatched rows, and manage a larger intermediate result set, which can be more expensive in a distributed processing environment.
   
 Thus, if your goal is simply to merge data from small tables for later aggregation, UNION ALL with a GROUP BY (such as using MAX over each column) is typically the more efficient approach.
+
+Additionally, the performance difference depends on the number of rows in the tables. When the tables have very few rows, the UNION ALL approach with aggregation introduces minimal overhead due to the absence of join matching, making it the preferred method. However, for tables with a large number of rows, both UNION ALL and FULL JOIN operations become more resource-intensive, though FULL JOINs tend to incur greater processing overhead due to the need to align rows between large datasets.
