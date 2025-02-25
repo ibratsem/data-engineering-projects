@@ -401,10 +401,8 @@ from (
             on  org.id           = othernm.org_sid
             and othernm.nametype = 'NameType_7'
             and org.startdate <= othernm.enddate and org.enddate >= othernm.startdate
-        left join custom_risk_cust_org_stg.s_counterparty_epk_financialinstitutecode_full_period fincode
-            on  org.id       = fincode.org_sid
-            and fincode.name = 'bicCode'
-            and org.startdate <= fincode.enddate and org.enddate >= fincode.startdate
+        left join dim_fin df
+            on org.id = df.org_sid
         left join custom_risk_cust_org_stg.s_counterparty_epk_relations_full_period rel_2
             on  org.id              = rel_2.org_sid
             and rel_2.relation_type = 'PartyRelatedRole_50'
@@ -413,15 +411,6 @@ from (
             on  org.id            = rel.org_sid
             and rel.relation_type = 'PartyRelatedRole_49'
             and org.startdate <= rel.enddate and org.enddate >= rel.startdate
-        left join custom_risk_cust_org_stg.s_fok_class_cred cl_cred                               -- stg по ФОК
-            on  org.id = cl_cred.epk_id
-            and org.startdate <= cl_cred.effectiveto and org.enddate >= cl_cred.effectivefrom
-        left join custom_risk_cust_org_stg.s_fok_last_fin_montrg_dt fmdt
-            on  org.id = fmdt.divid
-            and org.startdate <= fmdt.effectiveto and org.enddate >= fmdt.effectivefrom
-        left join custom_risk_cust_org_stg.s_dis_clients_on_montrng com                           -- stg по ДИС
-            on  org.id = com.client_id
-            and org.startdate <= com.effectiveto and org.enddate >= com.effectivefrom
         left join step0 cg                                                                        -- stg-по консгруппам
             on  org.id = cg.epkid                                                                 
             and org.startdate <= cg.end_dt and org.enddate >= cg.start_dt
