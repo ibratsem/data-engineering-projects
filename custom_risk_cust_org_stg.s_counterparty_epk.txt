@@ -337,16 +337,16 @@ from (
         left join custom_risk_cust_org_stg.s_counterparty_epk_eqvl_full_period report
             on  org.id                 = report.org_sid
             and report.ext_system_name = 'EquivalentSystemType_1024'
-            and not(org.startdate > report.enddate or org.enddate < report.startdate) 
+            and org.startdate <= report.enddate and org.enddate >= report.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_manageemploye_full_period mngr
             on  org.id = mngr.org_sid
-            and not(org.startdate > mngr.enddate or org.enddate < mngr.startdate) 
+            and org.startdate <= mngr.enddate and org.enddate >= mngr.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_terbank_full_period tb
             on  org.id = tb.org_sid
-            and not(org.startdate > tb.enddate or org.enddate < tb.startdate) 
+            and org.startdate <= tb.enddate and org.enddate >= tb.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_okved_full_period okved
             on  org.id = okved.org_sid
-            and not(org.startdate > okved.enddate or org.enddate < okved.startdate) 
+            and org.startdate <= okved.enddate and org.enddate >= okved.startdate
         -- BROADCAST    
         left join custom_risk_cust_org_stg.s_counterparty_epk_nonrsdtaxreq_full_period nonrsdtax
             on  org.id = nonrsdtax.org_sid
@@ -384,18 +384,18 @@ from (
             and org.startdate <= rel.enddate and org.enddate >= rel.startdate
         left join custom_risk_cust_org_stg.s_fok_class_cred cl_cred                               -- stg по ФОК
             on  org.id = cl_cred.epk_id
-            and not(org.startdate > cl_cred.effectiveto or org.enddate < cl_cred.effectivefrom)
+            and org.startdate <= cl_cred.effectiveto and org.enddate >= cl_cred.effectivefrom
         left join custom_risk_cust_org_stg.s_fok_last_fin_montrg_dt fmdt
             on  org.id = fmdt.divid
             and org.startdate <= fmdt.effectiveto and org.enddate >= fmdt.effectivefrom
         left join custom_risk_cust_org_stg.s_dis_clients_on_montrng com                           -- stg по ДИС
             on  org.id = com.client_id
-            and not(org.startdate > com.effectiveto or org.enddate < com.effectivefrom)
+            and org.startdate <= com.effectiveto and org.enddate >= com.effectivefrom
         left join step0 cg                                                                        -- stg-по консгруппам
             on  org.id = cg.epkid                                                                 
-            and not(org.startdate > cg.end_dt or org.enddate < cg.start_dt)                       
+            and org.startdate <= cg.end_dt and org.enddate >= cg.start_dt
         left join custom_risk_cust_org_stg.s_gsz_x_org gsz                                        -- stg-по ГСЗ             --изменено 19.09.2023
             on  org.id = gsz.org_epk_sid 
-            and not(org.startdate > gsz.end_dt or org.enddate < gsz.start_dt)
+            and org.startdate <= gsz.end_dt and org.enddate >= gsz.start_dt
 ) t
 where effectiveto >= effectivefrom
