@@ -66,6 +66,24 @@ dim_fin as (
          from custom_risk_cust_org_stg.s_fok_last_fin_montrg_dt
     ) t
     group by org_sid
+),
+dim_small as (
+    select 
+         org_sid,
+         max(case when source = 'otherdocument' then document_value end) as other_document,
+         max(case when source = 'othertaxnumber' then tax_number end) as other_tax_number,
+         max(case when source = 'otherregistrationnumber' then reg_number end) as other_registration_number
+    from (
+         select org_sid, document_value, 'otherdocument' as source
+         from custom_risk_cust_org_stg.s_party_identificatation_otherdocument
+         union all
+         select org_sid, tax_number, 'othertaxnumber' as source
+         from custom_risk_cust_org_stg.s_party_organization_identification_othertaxnumber
+         union all
+         select org_sid, reg_number, 'otherregistrationnumber' as source
+         from custom_risk_cust_org_stg.s_party_organization_identification_otherregistrationnumber
+    ) s
+    group by org_sid
 )
 /* %%EndOfWithBlock=1 */
 
