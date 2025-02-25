@@ -320,7 +320,7 @@ from (
             and org.startdate <= ogrn.enddate and org.enddate >= ogrn.startdate
 		left join custom_risk_cust_org_stg.s_counterparty_epk_lei_full_period lei
             on  org.id = lei.org_sid
-            and not(org.startdate > lei.enddate or org.enddate < lei.startdate)	
+            and org.startdate <= lei.enddate and org.enddate >= lei.startdate
         left join custom_risk_cust_org_stg.s_counterparty_epk_inn_full_period inn
             on  org.id = inn.org_sid
             and org.startdate <= inn.enddate and org.enddate >= inn.startdate
