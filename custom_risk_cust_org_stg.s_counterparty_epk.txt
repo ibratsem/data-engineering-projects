@@ -25,6 +25,24 @@ step0 as (
 			and cg.key    is not null
 			and to_date(ca.start_dt) <= to_date(cg.effectiveto  )
 			and to_date(ca.end_dt  ) >= to_date(cg.effectivefrom)
+),
+dim_orgnames as (
+    select
+         org_sid,
+         max(case when nametype = 'NameType_9' then name end) as short_name,
+         max(case when nametype = 'NameType_8' then name end) as full_name,
+         max(case when nametype = 'NameType_7' then name end) as other_name
+    from custom_risk_cust_org_stg.s_counterparty_epk_orgnames_full_period
+    group by org_sid
+),
+dim_partytoparty as (
+    select
+         org_sid,
+         max(case when parentgroup = 'PartyGroup_1010' then name end) as bitl_name,
+         max(case when parentgroup = 'PartyGroup_510' then name end) as friend_name,
+         max(case when parentgroup = 'PartyGroup_1011' then code end) as dprtm_code
+    from custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period
+    group by org_sid
 )
 /* %%EndOfWithBlock=1 */
 
@@ -181,7 +199,7 @@ from (
         ,okved.okved_nm                                                   as okved_name
         ,crmattr.org_strc_type_name                                       as org_strc_type_name 
         ,org.okopf_name                                                   as okopf_name
-        ,fullnm.name                                                      as full_name
+        ,dnames.full_name                                                 as full_name
         ,crmattr.org_acssr_type_name                                      as org_acssr_type_name
         ,crmattr.segment                                                  as segment
         ,org.org_card_type_name                                           as org_card_type_name
@@ -271,11 +289,11 @@ from (
         ,ogrn.ogrn                                                        as ogrn                 
         ,coalesce(crmattr.keyclient_flag, 0)                              as keyclient_flag                     
         ,cg.name                                                          as grccust_name
-        ,shortnm.name                                                     as short_name         
+        ,dnames.short_name                                                as short_name         
         ,cg.kgroup                                                        as grccust_sid  
         ,specreq.cust_liquidation_type_name                               as cust_liquidation_type_name  
         ,gsz.org_rel_gsz_stts_code                                        as cust_gsz_stts_type_name                 
-        ,dprtm.code                                                       as cover_dep_sid              
+        ,dparty.dprtm_code                                                as cover_dep_sid              
         ,addr.locty_okato_code                                            as locty_okato_code   
         ,coalesce(specreq.cust_org_bnkpcy_flag, 0)                        as cust_org_bnkpcy_flag        
         ,specreq.bnkpcy_stage_code                                        as bnkpcy_stage_code           
@@ -284,7 +302,7 @@ from (
         ,addr.office                                                      as cust_org_office_num
         ,addr.fiascode                                                    as cust_org_addr_fias_num
         ,addr.cntry_oksm_code                                             as cntry_oksm_code
-        ,othernm.name                                                     as cust_org_other_name
+        ,dnames.other_name                                                as cust_org_other_name
         ,concat(addr.street, ' ', addr.street_type_name)                  as cust_org_street_name
         ,addr.bulk                                                        as cust_org_blk_num
         ,addr.building                                                    as cust_org_bld_num
@@ -297,11 +315,11 @@ from (
         ,nonrsdtax.nonrsd_org_cntry_rsdnt_tax_reg_dt                      as nonrsd_org_cntry_rsdn_tax_reg_dt
         ,nonrsdtax.nonrsd_org_cntry_rsdnt_tax_gov_org_reg_name            as nonrsd_org_cntry_rsdn_tax_gov_org_name
         ,org.org_ctgry_name                                               as org_ctgry_name
-        ,if(bitl.name is not null, 1, 0)                                  as org_busn_insider_flag      --измененено 20.09.2023
+        ,if(dparty.bitl_name is not null, 1, 0)                             as org_busn_insider_flag      --измененено 20.09.2023
         ,ogrn.cust_org_reg_org_name                                       as org_gov_org_reg_name
 		,lei.org_lei_num                                                  as org_lei_num
         ,gsz.org_include_gsz_dttm                                         as org_include_gsz_dttm    
-        ,friend.name                                                      as cust_org_friendly_name
+        ,dparty.friend_name                                               as cust_org_friendly_name
         ,mngr.cust_mngr_tab_num                                           as cust_mngr_tab_num
         ,fincode.fin_code_value                                           as org_bic_num
         ,report.eqvl_org_sid                                              as org_epk_report_sid
@@ -354,18 +372,8 @@ from (
         left join custom_risk_cust_org_stg.s_counterparty_epk_nonrsdreg_full_period nonrsdreg 
             on  org.id = nonrsdreg.org_sid
             and org.startdate <= nonrsdreg.enddate and org.enddate >= nonrsdreg.startdate
-        left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period bitl
-            on  org.id           = bitl.org_sid
-            and bitl.parentgroup = 'PartyGroup_1010'
-            and org.startdate <= bitl.enddate and org.enddate >= bitl.startdate
-        left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period friend
-            on  org.id             = friend.org_sid
-            and friend.parentgroup = 'PartyGroup_510'
-            and org.startdate <= friend.enddate and org.enddate >= friend.startdate
-        left join custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period dprtm
-            on  org.id            = dprtm.org_sid
-            and dprtm.parentgroup = 'PartyGroup_1011'
-            and org.startdate <= dprtm.enddate and org.enddate >= dprtm.startdate
+        left join dim_partytoparty dparty
+            on org.id = dparty.org_sid
         left join custom_risk_cust_org_stg.s_counterparty_epk_orgnames_full_period othernm
             on  org.id           = othernm.org_sid
             and othernm.nametype = 'NameType_7'
