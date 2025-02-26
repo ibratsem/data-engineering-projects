@@ -40,7 +40,8 @@ dim_partytoparty as (
          org_sid,
          max(case when parentgroup = 'PartyGroup_1010' then name end) as bitl_name,
          max(case when parentgroup = 'PartyGroup_510' then name end) as friend_name,
-         max(case when parentgroup = 'PartyGroup_1011' then code end) as dprtm_code
+         max(case when parentgroup = 'PartyGroup_1011' then code end) as dprtm_code,
+         max(case when parentgroup = 'PartyGroup_1011' then name end) as dprtm_name
     from custom_risk_cust_org_stg.s_counterparty_epk_partytoparty_full_period
     group by org_sid
 ),
