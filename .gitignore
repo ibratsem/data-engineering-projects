@@ -2,4 +2,4 @@
 .env
 .aider.tags.cache.v3/
 dags/__pycache__/
-sql_sber/
+sql_sber/**
