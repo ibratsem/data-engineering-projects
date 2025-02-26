@@ -9,6 +9,7 @@ except Exception as e:
 # Create a new Spark session to ensure the LiveListenerBus is active
 spark = SparkSession.builder \
     .appName("SparkFixApp") \
+    .enableHiveSupport() \
     .getOrCreate()
 
 print("Spark session started successfully.")
