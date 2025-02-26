@@ -466,14 +466,8 @@ from (
             and org.startdate <= othernm.enddate and org.enddate >= othernm.startdate
         left join dim_fin df
             on org.id = df.org_sid
-        left join custom_risk_cust_org_stg.s_counterparty_epk_relations_full_period rel_2
-            on  org.id              = rel_2.org_sid
-            and rel_2.relation_type = 'PartyRelatedRole_50'
-            and org.startdate <= rel_2.enddate and org.enddate >= rel_2.startdate
-        left join custom_risk_cust_org_stg.s_counterparty_epk_relations_full_period rel
-            on  org.id            = rel.org_sid
-            and rel.relation_type = 'PartyRelatedRole_49'
-            and org.startdate <= rel.enddate and org.enddate >= rel.startdate
+        left join dim_relation
+            on org.id = dim_relation.org_sid
         left join step0 cg                                                                        -- stg-по консгруппам
             on  org.id = cg.epkid                                                                 
             and org.startdate <= cg.end_dt and org.enddate >= cg.start_dt
